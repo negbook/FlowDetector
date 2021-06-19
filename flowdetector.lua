@@ -10,9 +10,6 @@ function FlowCheck(name,inputValue)
         local new = FD.temp[2]
         local old = FD.temp[1]
         local refreshFD = function(n) FD.temp[1] = n end
-        if not FD then 
-            return 
-        end 
         new = inputValue
         if old == nil then 
             FlowOnInitialise(name,new) --無默認值並由nil首次載入

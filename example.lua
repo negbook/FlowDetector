@@ -1,5 +1,6 @@
+
 function StartExample()
-   
+
     FlowCheckCreate('health',"hello")
     CreateThread(function()
         
@@ -17,26 +18,25 @@ function FlowCheck(name,inputValue)
         return
 	end 
 	local FD = FlowDetector[name]
-	local new = FD.temp[2]
-	local old = FD.temp[1]
-	local refreshFD = function(n) FD.temp[1] = n end
-	if not FD then 
-		return 
-	end 
-	new = inputValue
-	if old == nil then 
-		FlowOnInitialise(name,new) --無默認值並由nil首次載入
-		refreshFD(new) --由nil賦予新值
-	elseif old == new then --一樣
-		FlowOnSame(name)
-	elseif old ~= new then 
-		if new == nil then 
-			error("WHY IS HERE GOT NIL?",2)
-		else 
-			FlowOnChange(name,old,new) --有變更
-			refreshFD(new) --舊變新
-		end 
-	end 
+    if FD then 
+        local new = FD.temp[2]
+        local old = FD.temp[1]
+        local refreshFD = function(n) FD.temp[1] = n end
+        new = inputValue
+        if old == nil then 
+            FlowOnInitialise(name,new) --無默認值並由nil首次載入
+            refreshFD(new) --由nil賦予新值
+        elseif old == new then --一樣
+            FlowOnSame(name)
+        elseif old ~= new then 
+            if new == nil then 
+                error("WHY IS HERE GOT NIL?",2)
+            else 
+                FlowOnChange(name,old,new) --有變更
+                refreshFD(new) --舊變新
+            end 
+        end 
+    end 
 end 
 
 function FlowCheckCreate(name,defaultValue)
