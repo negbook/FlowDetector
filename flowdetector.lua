@@ -33,6 +33,9 @@ function FlowCheckCreate(name,defaultValue)
 end 
 
 function FlowCheckDelete(name)
+    if debuglog then 
+        error("You may not see this.Set debuglog to false ",2)
+    end 
 	FlowDetector[name] = nil
 	collectgarbage()
 end
