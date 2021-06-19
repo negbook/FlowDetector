@@ -1,5 +1,5 @@
 FlowDetector = {}
-function FlowCheck(name,x)
+function FlowCheck(name,inputValue)
 	if not FlowDetector[name] then 
 		FlowCheckCreate(name)
 	end 
@@ -10,7 +10,7 @@ function FlowCheck(name,x)
 	if not FD then 
 		return 
 	end 
-	new = x
+	new = inputValue
 	if old == nil then 
 		FlowOnInitialise(name,new) --無默認值並由nil首次載入
 		refreshFD(new) --由nil賦予新值
@@ -37,13 +37,13 @@ function FlowCheckDelete(name)
 end
 
 function FlowOnInitialise(name,thefirstValue)
-	--print(name..' The first value: '..thefirstValue)
+	
 end 
 
 function FlowOnSame(name)
-	--print(name..' same')
+	
 end
 
-function FlowOnChange(name,old,new)
-	--print(name..") change : "..old.." to "..new.." type: ".." old: "..type(old).." new: "..type(new))
+function FlowOnChange(name,fromValue,toValue)
+	
 end 
