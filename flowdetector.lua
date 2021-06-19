@@ -34,6 +34,8 @@ function FlowCheck(name,inputValue)
             end 
         end 
     end 
+    local self = inputValue
+    return self
 end 
 
 function FlowCheckCreate(name,defaultValue)
