@@ -2,13 +2,13 @@
 FlowDetector utilities for FXServer
 ![image](https://github.com/negbook/flowdetector/blob/main/preview.png?raw=true)
 
-[INSTALLATION]
+[INSTALLATION]  
 Set it as a dependency in you fxmanifest.lua
 and
 ```
 client_script '@flowdetector/flowdetector.lua'
 ```
-[FUNCTIONS]
+[FUNCTIONS]  
 ```
 FlowCheckCreate(name,defaultValue)        --to create a detector to follow a value's changing
 FlowCheck(name,inputValue)                --input a value into the detector
