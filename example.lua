@@ -10,7 +10,7 @@ function StartExample()
     end)
 end 
 FlowDetector = {}
-debuglog = false
+debuglog = true
 function FlowCheck(name,inputValue)
 	if debuglog and not FlowDetector[name] then 
 		error("Make Sure FlowCheckCreate('"..name.."') first",2)
