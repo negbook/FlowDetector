@@ -22,8 +22,20 @@ FlowOnSame(name)                          --when the newervalue is the same from
 FlowOnChange(name,fromValue,toValue)      --when the oldervalue become a new value 
 ```
 
-[EXAMPLE]
+[EXAMPLE] [cfx-switchcase by negbook](https://github.com/negbook/cfx-switchcase/blob/main/cfx-switchcase.lua)
 ```
+function FlowOnChange(name,fromValue,toValue)
+	local case = {} --cfx-switchcase by negbook 
+    local switch = setmetatable({},{__call=function(a,b)case=setmetatable({},{__call=function(a,b)return a[b]end,__index=function(a,c)return c and c==b and setmetatable({},{__call=function(a,d)d()end})or function()end end})return a[b]end,__index=function(a,c)return setmetatable({},{__call=function(a,...)end})end})
+    switch(name)(
+        case('coords')(function()
+            print('Position Updated:from ('..type(fromValue)..') '..tostring(fromValue)..'  to ('..type(toValue)..') '..tostring(toValue))
+        end),
+        case('health')(function()
+            print('Health Updated:from ('..type(fromValue)..') '..tostring(fromValue)..'  to ('..type(toValue)..') '..tostring(toValue))
+        end)
+    )
+end 
 FlowCheckCreate('health',"hello")
 CreateThread(function()
     
