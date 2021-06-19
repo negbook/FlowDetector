@@ -3,7 +3,9 @@ FlowDetector_Vars = {}
 FlowDetector.OnInitialise = {}
 FlowDetector.OnSame = {}
 FlowDetector.OnChange = {}
-
+FlowDetector.CallbackInitialise = {}
+FlowDetector.CallbackSame = {}
+FlowDetector.CallbackChange = {}
 
 debuglog = false
 function FlowCheck(name,inputValue)
@@ -20,16 +22,19 @@ function FlowCheck(name,inputValue)
         if old == nil then 
             if FlowOnInitialise then FlowOnInitialise(name,new) end  --無默認值並由nil首次載入
             if FlowDetector.OnInitialise[name] then FlowDetector.OnInitialise[name](name) end
+            if FlowDetector.CallbackInitialise[name] then FlowDetector.CallbackInitialise[name](name,old,new) end 
             refreshFD(new) --由nil賦予新值
         elseif old == new then --一樣
             if FlowOnSame then FlowOnSame(name) end 
             if FlowDetector.OnSame[name] then FlowDetector.OnSame[name](name) end
+            if FlowDetector.CallbackSame[name] then FlowDetector.CallbackSame[name](name,old,new) end 
         elseif old ~= new then 
             if new == nil then 
                 error("WHY IS HERE GOT NIL?",2)
             else 
                 if FlowOnChange then FlowOnChange(name,old,new) end  --有變更
                 if FlowDetector.OnChange[name] then FlowDetector.OnChange[name](name,old,new) end
+                if FlowDetector.CallbackChange[name] then FlowDetector.CallbackChange[name](name,old,new) end 
                 refreshFD(new) --舊變新
             end 
         end 
@@ -38,11 +43,13 @@ function FlowCheck(name,inputValue)
     return self
 end 
 
-function FlowCheckCreate(name,defaultValue)
+function FlowCheckCreate(name,defaultValue,cbchange,cbsame,cbinit)
     
 	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
 	FlowDetector_Vars[name].temp = {defaultValue,defaultValue} 
-    
+    FlowDetector.CallbackChange[name] = cbchange
+    FlowDetector.CallbackSame[name] = cbsame
+    FlowDetector.CallbackInitialise[name] = cbinit
     
     
 end 
