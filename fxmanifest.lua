@@ -5,6 +5,5 @@ description 'FlowDetector utilities for FXServer'
 
 author 'negbook'
 
-shared_scripts {
-	'flowdetector.lua'
-}
+shared_script 'flowdetector.lua'
+
