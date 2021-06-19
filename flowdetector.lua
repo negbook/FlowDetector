@@ -1,11 +1,13 @@
 FlowDetector = {}
-debuglog = false 
+FlowDetector_Vars = {}
+
+debuglog = false
 function FlowCheck(name,inputValue)
-	if debuglog and not FlowDetector[name] then 
+	if debuglog and not FlowDetector_Vars[name] then 
 		error("Make Sure FlowCheckCreate('"..name.."') first",2)
         return
 	end 
-	local FD = FlowDetector[name]
+	local FD = FlowDetector_Vars[name]
     if FD then
         local new = FD.temp[2]
         local old = FD.temp[1]
@@ -28,15 +30,15 @@ function FlowCheck(name,inputValue)
 end 
 
 function FlowCheckCreate(name,defaultValue)
-	if not FlowDetector[name] then FlowDetector[name] = {} end 
-	FlowDetector[name].temp = {defaultValue,defaultValue} 
+	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
+	FlowDetector_Vars[name].temp = {defaultValue,defaultValue} 
 end 
 
 function FlowCheckDelete(name)
     if debuglog then 
         error("You may not see this.Set debuglog to false ",2)
     end 
-	FlowDetector[name] = nil
+	FlowDetector_Vars[name] = nil
 	collectgarbage()
 end
 
