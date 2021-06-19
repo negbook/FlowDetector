@@ -1,5 +1,9 @@
 FlowDetector = {}
 FlowDetector_Vars = {}
+FlowDetector.OnInitialise = {}
+FlowDetector.OnSame = {}
+FlowDetector.OnChange = {}
+
 
 debuglog = false
 function FlowCheck(name,inputValue)
@@ -15,14 +19,17 @@ function FlowCheck(name,inputValue)
         new = inputValue
         if old == nil then 
             if FlowOnInitialise then FlowOnInitialise(name,new) end  --無默認值並由nil首次載入
+            if FlowDetector.OnInitialise[name] then FlowDetector.OnInitialise[name](name) end
             refreshFD(new) --由nil賦予新值
         elseif old == new then --一樣
             if FlowOnSame then FlowOnSame(name) end 
+            if FlowDetector.OnSame[name] then FlowDetector.OnSame[name](name) end
         elseif old ~= new then 
             if new == nil then 
                 error("WHY IS HERE GOT NIL?",2)
             else 
                 if FlowOnChange then FlowOnChange(name,old,new) end  --有變更
+                if FlowDetector.OnChange[name] then FlowDetector.OnChange[name](name,old,new) end
                 refreshFD(new) --舊變新
             end 
         end 
@@ -30,8 +37,12 @@ function FlowCheck(name,inputValue)
 end 
 
 function FlowCheckCreate(name,defaultValue)
+    
 	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
 	FlowDetector_Vars[name].temp = {defaultValue,defaultValue} 
+    
+    
+    
 end 
 
 function FlowCheckDelete(name)
@@ -41,6 +52,8 @@ function FlowCheckDelete(name)
 	FlowDetector_Vars[name] = nil
 	collectgarbage()
 end
+
+
 
 --[=[
 function FlowOnInitialise(name,thefirstValue)
