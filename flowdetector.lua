@@ -2,7 +2,7 @@ FlowDetector = {}
 debuglog = false 
 function FlowCheck(name,inputValue)
 	if debuglog and not FlowDetector[name] then 
-		error("Make Sure FlowCheckCreate("..name..") first",2)
+		error("Make Sure FlowCheckCreate('"..name.."') first",2)
         return
 	end 
 	local FD = FlowDetector[name]
