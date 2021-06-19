@@ -1,4 +1,3 @@
-
 FlowDetector = {}
 function FlowCheck(name,x)
     if not FlowDetector[name] then 
@@ -38,19 +37,13 @@ function FlowCheckDelete(name)
 end
 
 function FlowOnInitialise(name,thefirstValue)
-    print(name..' The first value: '..thefirstValue)
+    --print(name..' The first value: '..thefirstValue)
 end 
 
 function FlowOnSame(name)
-	print(name..' same')
+	--print(name..' same')
 end
 
 function FlowOnChange(name,old,new)
-	print(name..") change : "..old.." to "..new.." type: ".." old: "..type(old).." new: "..type(new))
+	--print(name..") change : "..old.." to "..new.." type: ".." old: "..type(old).." new: "..type(new))
 end 
-
-
-FlowCheckCreate('hp')
-FlowCheck('hp',100) 
-FlowCheck('hp',100) 
-FlowCheck('hp',100)
