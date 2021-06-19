@@ -17,7 +17,7 @@ FlowCheck(name,inputValue)                --input a value into the detector
 FlowCheckDelete(name)                     --waste the detector
 
 
-FlowOnInitialise(name,thefirstValue)      --when the value is from undefined to a value 
+FlowOnInitialise(name,thefirstValue)      --when the value is from undefined to a newervalue 
 FlowOnSame(name)                          --when the newervalue is the same from oldervalue
-FlowOnChange(name,fromValue,toValue)      --when the value become a new value 
+FlowOnChange(name,fromValue,toValue)      --when the oldervalue become a new value 
 ```
