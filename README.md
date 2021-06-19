@@ -21,3 +21,15 @@ FlowOnInitialise(name,thefirstValue)      --when the value is from undefined to 
 FlowOnSame(name)                          --when the newervalue is the same from oldervalue
 FlowOnChange(name,fromValue,toValue)      --when the oldervalue become a new value 
 ```
+
+[EXAMPLE]
+```
+FlowCheckCreate('health',"hello")
+CreateThread(function()
+    
+    while true do Wait(1000)
+        FlowCheck('coords',GetEntityCoords(PlayerPedId()))
+        FlowCheck('health',GetEntityHealth(PlayerPedId()))
+    end 
+end)
+```
