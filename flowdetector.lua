@@ -40,6 +40,7 @@ function FlowCheckDelete(name)
 	collectgarbage()
 end
 
+--[=[
 function FlowOnInitialise(name,thefirstValue)
 	
 end 
@@ -51,3 +52,4 @@ end
 function FlowOnChange(name,fromValue,toValue)
 	
 end 
+--]=]
