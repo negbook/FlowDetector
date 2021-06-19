@@ -1,10 +1,10 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'trackDector utilities for FXServer'
+description 'FlowDetector utilities for FXServer'
 
 author 'negbook'
 
-client_scripts {
+shared_scripts {
 	'flowdetector.lua'
 }
