@@ -23,6 +23,10 @@ FlowCheckDelete(name)                     --waste the detector
 FlowOnInitialise(name,thefirstValue)      --when the value is from undefined to a newervalue 
 FlowOnSame(name)                          --when the newervalue is the same from oldervalue
 FlowOnChange(name,fromValue,toValue)      --when the oldervalue become a new value 
+
+FlowDetector.OnInitialise[name](name,thefirstValue) --same as above but example2.lua
+FlowDetector.OnSame[name](name,thefirstValue)  --same  as above but example2.lua
+FlowDetector.OnChange[name](name,thefirstValue)  --same  as above but example2.lua
 ```
 
 [EXAMPLE] [cfx-switchcase by negbook](https://github.com/negbook/cfx-switchcase/blob/main/cfx-switchcase.lua)
