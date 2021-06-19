@@ -24,15 +24,15 @@ function FlowCheck(name,inputValue)
         local refreshFD = function(n) FD.temp[1] = n end
         new = inputValue
         if old == nil then 
-            FlowOnInitialise(name,new) --無默認值並由nil首次載入
+            if FlowOnInitialise then FlowOnInitialise(name,new) end  --無默認值並由nil首次載入
             refreshFD(new) --由nil賦予新值
         elseif old == new then --一樣
-            FlowOnSame(name)
+            if FlowOnSame then FlowOnSame(name) end 
         elseif old ~= new then 
             if new == nil then 
                 error("WHY IS HERE GOT NIL?",2)
             else 
-                FlowOnChange(name,old,new) --有變更
+                if FlowOnChange then FlowOnChange(name,old,new) end  --有變更
                 refreshFD(new) --舊變新
             end 
         end 
