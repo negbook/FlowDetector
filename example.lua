@@ -1,3 +1,14 @@
+function StartExample()
+    FlowCheckCreate('health',"hello")
+    CreateThread(function()
+        
+        while true do Wait(1000)
+            FlowCheck('coords',GetEntityCoords(PlayerPedId()))
+            FlowCheck('health',GetEntityHealth(PlayerPedId()))
+        end 
+    end)
+end 
+
 FlowDetector = {}
 function FlowCheck(name,inputValue)
 	if not FlowDetector[name] then 
@@ -57,11 +68,5 @@ function FlowOnChange(name,fromValue,toValue)
     )
 end 
 
-FlowCheckCreate('health',"hello")
-CreateThread(function()
-    
-    while true do Wait(1000)
-        FlowCheck('coords',GetEntityCoords(PlayerPedId()))
-        FlowCheck('health',GetEntityHealth(PlayerPedId()))
-    end 
-end)
+
+StartExample()
