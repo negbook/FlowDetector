@@ -1,4 +1,5 @@
 function StartExample()
+    FlowCheckCreate('coords')
     FlowCheckCreate('health',"hello")
     CreateThread(function()
         
@@ -8,11 +9,12 @@ function StartExample()
         end 
     end)
 end 
-
 FlowDetector = {}
+debuglog = false 
 function FlowCheck(name,inputValue)
-	if not FlowDetector[name] then 
-		FlowCheckCreate(name)
+	if debuglog and not FlowDetector[name] then 
+		error("Make Sure FlowCheckCreate("..name..") first",2)
+        return
 	end 
 	local FD = FlowDetector[name]
 	local new = FD.temp[2]
