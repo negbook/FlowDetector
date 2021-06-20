@@ -6,6 +6,7 @@ FlowDetector.OnChange = {}
 FlowDetector.CallbackInitialise = {}
 FlowDetector.CallbackSame = {}
 FlowDetector.CallbackChange = {}
+FlowDetector_CallbackHash = {}
 
 debuglog = false
 function FlowCheck(name,inputValue)
@@ -60,14 +61,24 @@ function FlowCheckDelete(name)
 end
 
 function RegisterFlowCallback(name,types,cb)
+    local shash = GetHashKey(tostring(debug.getinfo(2,'f'))..tostring(debug.getinfo(2).currentline))
+    if not FlowDetector_CallbackHash[types] then FlowDetector_CallbackHash[types] = {} end 
+    if not FlowDetector_CallbackHash[types][shash] then FlowDetector_CallbackHash[types][shash] = {} end 
+    FlowDetector_CallbackHash[types][shash].cb = cb 
+    FlowDetector_CallbackHash[types][shash].name = name 
+    local _cb = function(...)
+        for i,v in pairs(FlowDetector_CallbackHash[types]) do 
+            v.cb(...)
+        end 
+    end 
     if not FlowDetector_Vars[name] then return error("Make sure FlowCheckCreate('".. name .."') first.",2) end 
     local t = string.lower(types)
     if t == "change" then 
-    FlowDetector.CallbackChange[name] = cb
+    FlowDetector_CallbackChange[name] = _cb
     elseif t == "same" then  
-    FlowDetector.CallbackSame[name] = cb
+    FlowDetector_CallbackSame[name] = _cb
     elseif t == "init" or t == "initialise" then  
-    FlowDetector.CallbackInitialise[name] = cb
+    FlowDetector_CallbackInitialise[name] = _cb
     end 
 end 
 
