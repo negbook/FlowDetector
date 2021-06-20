@@ -1,11 +1,11 @@
 FlowDetector = {}
 FlowDetector_Vars = {}
-FlowDetector.OnInitialise = {}
-FlowDetector.OnSame = {}
-FlowDetector.OnChange = {}
-FlowDetector.CallbackInitialise = {}
-FlowDetector.CallbackSame = {}
-FlowDetector.CallbackChange = {}
+FlowDetector_OnInitialise = {}
+FlowDetector_OnSame = {}
+FlowDetector_OnChange = {}
+FlowDetector_CallbackInitialise = {}
+FlowDetector_CallbackSame = {}
+FlowDetector_CallbackChange = {}
 FlowDetector_CallbackHash = {}
 
 debuglog = false
@@ -22,20 +22,20 @@ function FlowCheck(name,inputValue)
         new = inputValue
         if old == nil then 
             if FlowOnInitialise then FlowOnInitialise(name,new) end  --無默認值並由nil首次載入
-            if FlowDetector.OnInitialise[name] then FlowDetector.OnInitialise[name](name) end
-            if FlowDetector.CallbackInitialise[name] then FlowDetector.CallbackInitialise[name](name,old,new) end 
+            if FlowDetector_OnInitialise[name] then FlowDetector_OnInitialise[name](name) end
+            if FlowDetector_CallbackInitialise[name] then FlowDetector_CallbackInitialise[name](name,old,new) end 
             refreshFD(new) --由nil賦予新值
         elseif old == new then --一樣
             if FlowOnSame then FlowOnSame(name) end 
-            if FlowDetector.OnSame[name] then FlowDetector.OnSame[name](name) end
-            if FlowDetector.CallbackSame[name] then FlowDetector.CallbackSame[name](name,old,new) end 
+            if FlowDetector_OnSame[name] then FlowDetector_OnSame[name](name) end
+            if FlowDetector_CallbackSame[name] then FlowDetector_CallbackSame[name](name,old,new) end 
         elseif old ~= new then 
             if new == nil then 
                 error("WHY IS HERE GOT NIL?",2)
             else 
                 if FlowOnChange then FlowOnChange(name,old,new) end  --有變更
-                if FlowDetector.OnChange[name] then FlowDetector.OnChange[name](name,old,new) end
-                if FlowDetector.CallbackChange[name] then FlowDetector.CallbackChange[name](name,old,new) end 
+                if FlowDetector_OnChange[name] then FlowDetector_OnChange[name](name,old,new) end
+                if FlowDetector_CallbackChange[name] then FlowDetector_CallbackChange[name](name,old,new) end 
                 refreshFD(new) --舊變新
             end 
         end 
@@ -47,9 +47,9 @@ end
 function FlowCheckCreate(name,defaultValue,cbchange,cbsame,cbinit)
 	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
 	FlowDetector_Vars[name].temp = {defaultValue,defaultValue} 
-    FlowDetector.CallbackChange[name] = cbchange
-    FlowDetector.CallbackSame[name] = cbsame
-    FlowDetector.CallbackInitialise[name] = cbinit
+    FlowDetector_CallbackChange[name] = cbchange
+    FlowDetector_CallbackSame[name] = cbsame
+    FlowDetector_CallbackInitialise[name] = cbinit
 end 
 
 function FlowCheckDelete(name)
@@ -57,17 +57,25 @@ function FlowCheckDelete(name)
         error("You may not see this.Set debuglog to false ",2)
     end 
 	FlowDetector_Vars[name] = nil
+    FlowDetector_OnInitialise[name] = nil
+    FlowDetector_OnSame[name] = nil
+    FlowDetector_OnChange[name] = nil
+    FlowDetector_CallbackInitialise[name] = nil
+    FlowDetector_CallbackSame[name] = nil
+    FlowDetector_CallbackChange[name] = nil
+    FlowDetector_CallbackHash[name] = nil
 	collectgarbage()
 end
 
 function RegisterFlowCallback(name,types,cb)
     local shash = GetHashKey(tostring(debug.getinfo(2,'f'))..tostring(debug.getinfo(2).currentline))
-    if not FlowDetector_CallbackHash[types] then FlowDetector_CallbackHash[types] = {} end 
-    if not FlowDetector_CallbackHash[types][shash] then FlowDetector_CallbackHash[types][shash] = {} end 
-    FlowDetector_CallbackHash[types][shash].cb = cb 
-    FlowDetector_CallbackHash[types][shash].name = name 
+    if not FlowDetector_CallbackHash[name] then FlowDetector_CallbackHash[name] = {} end 
+    if not FlowDetector_CallbackHash[name][types] then FlowDetector_CallbackHash[name][types] = {} end 
+    if not FlowDetector_CallbackHash[name][types][shash] then FlowDetector_CallbackHash[name][types][shash] = {} end 
+    FlowDetector_CallbackHash[name][types][shash].cb = cb 
+    FlowDetector_CallbackHash[name][types][shash].name = name 
     local _cb = function(...)
-        for i,v in pairs(FlowDetector_CallbackHash[types]) do 
+        for i,v in pairs(FlowDetector_CallbackHash[name][types]) do 
             v.cb(...)
         end 
     end 
