@@ -59,14 +59,14 @@ function FlowCheckDelete(name)
 	collectgarbage()
 end
 
-function FlowCheckCreateCallback(name,defaultValue,types,cb)
-	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
-	if not FlowDetector_Vars[name].temp then FlowDetector_Vars[name].temp = {defaultValue,defaultValue} end 
-    if types == "change" then 
+function RegisterFlowCallback(name,types,cb)
+    if not FlowDetector_Vars[name] then return error("Make sure FlowCheckCreate('".. name .."') first.",2) end 
+    local t = string.lower(types)
+    if t == "change" then 
     FlowDetector.CallbackChange[name] = cb
-    elseif types == "same" then  
+    elseif t == "same" then  
     FlowDetector.CallbackSame[name] = cb
-    elseif types == "init" then  
+    elseif t == "init" or t == "initialise" then  
     FlowDetector.CallbackInitialise[name] = cb
     end 
 end 
