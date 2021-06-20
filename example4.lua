@@ -1,8 +1,10 @@
+
 CreateThread(function()
-    FlowCheckCreateCallback("Pause",false,'change',function(name,old,new)
+    FlowCheckCreate('Pause',false)
+    RegisterFlowCallback("Pause",'change',function(name,old,new)
         print(name.."hi")
     end )
-    FlowCheckCreateCallback("Pause",false,'same',function(name,old,new)
+    RegisterFlowCallback("Pause",'same',function(name,old,new)
         print(name.."xD")
     end )
     while true do
