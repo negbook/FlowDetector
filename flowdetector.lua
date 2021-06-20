@@ -72,11 +72,10 @@ function RegisterFlowCallback(name,types,cb)
     if not FlowDetector_CallbackHash[name] then FlowDetector_CallbackHash[name] = {} end 
     if not FlowDetector_CallbackHash[name][types] then FlowDetector_CallbackHash[name][types] = {} end 
     if not FlowDetector_CallbackHash[name][types][shash] then FlowDetector_CallbackHash[name][types][shash] = {} end 
-    FlowDetector_CallbackHash[name][types][shash].cb = cb 
-    FlowDetector_CallbackHash[name][types][shash].name = name 
+    FlowDetector_CallbackHash[name][types][shash] = cb 
     local _cb = function(...)
         for i,v in pairs(FlowDetector_CallbackHash[name][types]) do 
-            v.cb(...)
+            v(...)
         end 
     end 
     if not FlowDetector_Vars[name] then return error("Make sure FlowCheckCreate('".. name .."') first.",2) end 
