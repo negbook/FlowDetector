@@ -68,7 +68,7 @@ function FlowCheckDelete(name)
 end
 
 function RegisterFlowCallback(name,types,cb)
-    local shash = GetHashKey(tostring(debug.getinfo(2,'f'))..tostring(debug.getinfo(2).currentline))
+    local shash = tostring(debug.getinfo(2,'S').source)..'line'..tostring(debug.getinfo(2).currentline)
     if not FlowDetector_CallbackHash[name] then FlowDetector_CallbackHash[name] = {} end 
     if not FlowDetector_CallbackHash[name][types] then FlowDetector_CallbackHash[name][types] = {} end 
     if not FlowDetector_CallbackHash[name][types][shash] then FlowDetector_CallbackHash[name][types][shash] = {} end 
