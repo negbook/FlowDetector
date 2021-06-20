@@ -71,11 +71,11 @@ function RegisterFlowCallback(name,types,cb)
     local shash = tostring(debug.getinfo(2,'S').source)..'line'..tostring(debug.getinfo(2).currentline)
     if not FlowDetector_CallbackHash[name] then FlowDetector_CallbackHash[name] = {} end 
     if not FlowDetector_CallbackHash[name][types] then FlowDetector_CallbackHash[name][types] = {} end 
-    if not FlowDetector_CallbackHash[name][types][shash] then FlowDetector_CallbackHash[name][types][shash] = {} end 
-    FlowDetector_CallbackHash[name][types][shash] = cb 
+    local t = FlowDetector_CallbackHash[name][types]
+    table.insert(t,cb) 
     local _cb = function(...)
-        for i,v in pairs(FlowDetector_CallbackHash[name][types]) do 
-            v(...)
+        for i=1,#(t) do 
+            t[i](...)
         end 
     end 
     if not FlowDetector_Vars[name] then return error("Make sure FlowCheckCreate('".. name .."') first.",2) end 
