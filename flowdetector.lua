@@ -44,14 +44,11 @@ function FlowCheck(name,inputValue)
 end 
 
 function FlowCheckCreate(name,defaultValue,cbchange,cbsame,cbinit)
-    
 	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
 	FlowDetector_Vars[name].temp = {defaultValue,defaultValue} 
     FlowDetector.CallbackChange[name] = cbchange
     FlowDetector.CallbackSame[name] = cbsame
     FlowDetector.CallbackInitialise[name] = cbinit
-    
-    
 end 
 
 function FlowCheckDelete(name)
@@ -62,7 +59,17 @@ function FlowCheckDelete(name)
 	collectgarbage()
 end
 
-
+function FlowCheckCreateCallback(name,defaultValue,types,cb)
+	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
+	if not FlowDetector_Vars[name].temp then FlowDetector_Vars[name].temp = {defaultValue,defaultValue} end 
+    if types == "change" then 
+    FlowDetector.CallbackChange[name] = cb
+    elseif types == "same" then  
+    FlowDetector.CallbackSame[name] = cb
+    elseif types == "init" then  
+    FlowDetector.CallbackInitialise[name] = cb
+    end 
+end 
 
 --[=[
 function FlowOnInitialise(name,thefirstValue)
