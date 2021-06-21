@@ -6,13 +6,15 @@ CreateThread(function()
     FlowCheckCreate('B')
     FlowCheckCreate('C')
     FlowMakeLink("C","Pause")
-    RegisterFlowCallback("Pause",'change',function(name,old,new,linkedname)
-        linkedname = linkedname or 'self'
-        print(name.." change ",tostring(old),tostring(new) .. 'from '..linkedname)
+    RegisterFlowCallback("Pause",'change',function(name,old,new,islinked,linkto)
+        if islinked then 
+        print(linkto.." change ",tostring(old),tostring(new) .. 'from '..name)
+        end 
     end )
-    RegisterFlowCallback("A",'change',function(name,old,new,linkedname)
-        linkedname = linkedname or 'self'
-        print(name.." change ",tostring(old),tostring(new) .. 'from '..linkedname)
+    RegisterFlowCallback("A",'change',function(name,old,new,islinked,linkto)
+        if not islinked then 
+        print(name.." change ",tostring(old),tostring(new) )
+        end 
     end )
         FlowCheck("Pause",1)
         IsPause = FlowCheck("A",IsPauseMenuActive())

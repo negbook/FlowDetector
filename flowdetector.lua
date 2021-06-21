@@ -19,18 +19,18 @@ function FlowCheck(name,inputValue)
         local refreshFD = function(n) FD.temp[1] = n end
         new = inputValue
         if old == nil then 
-            if FlowDetector_CallbackInitialise[name] then FlowDetector_CallbackInitialise[name](name) end 
-            if toname and FlowDetector_CallbackInitialise[toname] then FlowDetector_CallbackInitialise[toname](toname,name) end 
+            if FlowDetector_CallbackInitialise[name] then FlowDetector_CallbackInitialise[name](name,false) end 
+            if toname and FlowDetector_CallbackInitialise[toname] then FlowDetector_CallbackInitialise[toname](name,true,toname) end 
             refreshFD(new) 
         elseif old == new then 
-            if FlowDetector_CallbackSame[name] then FlowDetector_CallbackSame[name](name) end 
-            if toname and FlowDetector_CallbackSame[toname] then FlowDetector_CallbackSame[toname](toname,name) end 
+            if FlowDetector_CallbackSame[name] then FlowDetector_CallbackSame[name](name,false) end 
+            if toname and FlowDetector_CallbackSame[toname] then FlowDetector_CallbackSame[toname](name,true,toname) end 
         elseif old ~= new then 
             if new == nil then 
                 error("WHY IS HERE GOT NIL?",2)
             else 
-                if FlowDetector_CallbackChange[name] then FlowDetector_CallbackChange[name](name,old,new) end 
-                if toname and FlowDetector_CallbackChange[toname] then FlowDetector_CallbackChange[toname](toname,old,new,name) end 
+                if FlowDetector_CallbackChange[name] then FlowDetector_CallbackChange[name](name,old,new,false) end 
+                if toname and FlowDetector_CallbackChange[toname] then FlowDetector_CallbackChange[toname](name,old,new,true,toname) end 
                 refreshFD(new) 
             end 
         end 
@@ -95,3 +95,4 @@ function FlowMakeLink(nameornames,sourcename)
         error('FlowMakeLink(string or table , sourcename)',2)
     end 
 end
+

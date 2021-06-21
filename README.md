@@ -16,7 +16,7 @@ client_script '@flowdetector/flowdetector.lua'
 FlowCheckCreate(name,defaultValue)        --to create a detector to follow a value's changing
 FlowCheck(name,inputValue)                --input a value into the detector
 FlowCheckDelete(name)                     --waste the detector
-RegisterFlowCallback(name,type,cb(name,old,new,islinked/fromlinkedname))        --trigger a function when detect something
+RegisterFlowCallback(name,type,cb(name,old,new,islinked,linkto))        --trigger a function when detect something
 FlowMakeLink(name1,name2)                 --link a detector to another detector.
 
 ```
@@ -31,13 +31,15 @@ CreateThread(function()
     FlowCheckCreate('B')
     FlowCheckCreate('C')
     FlowMakeLink("C","Pause")
-    RegisterFlowCallback("Pause",'change',function(name,old,new,linkedname)
-        linkedname = linkedname or 'self'
-        print(name.." change ",tostring(old),tostring(new) .. 'from '..linkedname)
+    RegisterFlowCallback("Pause",'change',function(name,old,new,islinked,linkto)
+        if islinked then 
+        print(linkto.." change ",tostring(old),tostring(new) .. 'from '..name)
+        end 
     end )
-    RegisterFlowCallback("A",'change',function(name,old,new,linkedname)
-        linkedname = linkedname or 'self'
-        print(name.." change ",tostring(old),tostring(new) .. 'from '..linkedname)
+    RegisterFlowCallback("A",'change',function(name,old,new,islinked,linkto)
+        if not islinked then 
+        print(name.." change ",tostring(old),tostring(new) )
+        end 
     end )
         FlowCheck("Pause",1)
         IsPause = FlowCheck("A",IsPauseMenuActive())
@@ -49,6 +51,5 @@ CreateThread(function()
         Citizen.Wait(332)
     end
 end)
-
 
 ```
