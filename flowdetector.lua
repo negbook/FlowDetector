@@ -6,7 +6,7 @@ FlowDetector_CallbackChange = {}
 FlowDetector_CallbackHash = {}
 FlowDetector_LinkTable = {}
 debuglog = false
-function FlowCheck(name,inputValue)
+FlowDetector.FlowCheck = function(name,inputValue)
 	if debuglog and not FlowDetector_Vars[name] then 
 		error("Make Sure FlowCheckCreate('"..name.."') first",2)
         return
@@ -38,14 +38,14 @@ function FlowCheck(name,inputValue)
     local self = inputValue
     return self
 end 
-function FlowCheckCreate(name,defaultValue,cbchange,cbsame,cbinit)
+FlowDetector.FlowCheckCreate = function(name,defaultValue,cbchange,cbsame,cbinit)
 	if not FlowDetector_Vars[name] then FlowDetector_Vars[name] = {} end 
 	FlowDetector_Vars[name].temp = {defaultValue,defaultValue} 
     FlowDetector_CallbackChange[name] = cbchange
     FlowDetector_CallbackSame[name] = cbsame
     FlowDetector_CallbackInitialise[name] = cbinit
 end 
-function FlowCheckDelete(name)
+FlowDetector.FlowCheckDelete = function(name)
     if debuglog then 
         error("You may not see this.Set debuglog to false ",2)
     end 
@@ -56,7 +56,7 @@ function FlowCheckDelete(name)
     FlowDetector_CallbackHash[name] = nil
 	collectgarbage()
 end
-function RegisterFlowCallback(name,types,cb)
+FlowDetector.RegisterFlowCallback = function(name,types,cb)
     --local shash = tostring(debug.getinfo(2,'S').source)..'line'..tostring(debug.getinfo(2).currentline)
     if not FlowDetector_CallbackHash[name] then FlowDetector_CallbackHash[name] = {} end 
     if not FlowDetector_CallbackHash[name][types] then FlowDetector_CallbackHash[name][types] = {} end 
@@ -80,7 +80,7 @@ function RegisterFlowCallback(name,types,cb)
         if not FlowDetector_CallbackInitialise[name] then FlowDetector_CallbackInitialise[name] = cb_cooked end 
     end 
 end 
-function FlowMakeLink(nameornames,sourcename)
+FlowDetector.FlowMakeLink = function(nameornames,sourcename)
     if type(nameornames) == 'string' then 
         local name = nameornames
         FlowDetector_LinkTable[name] = sourcename
@@ -96,3 +96,8 @@ function FlowMakeLink(nameornames,sourcename)
     end 
 end
 
+FlowDetector.Create = FlowDetector.FlowCheckCreate
+FlowDetector.Delete = FlowDetector.FlowCheckDelete
+FlowDetector.Register = FlowDetector.RegisterFlowCallback
+FlowDetector.Link = FlowDetector.FlowMakeLink
+FlowDetector.Check = FlowDetector.FlowCheck
