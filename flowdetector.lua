@@ -17,12 +17,13 @@ FlowDetector.FlowCheck = function(name,inputValue)
         local new = FD.temp[2]
         local old = FD.temp[1]
         local refreshFD = function(n) FD.temp[1] = n end
+        
         new = inputValue
         if old == nil then 
             if FlowDetector_CallbackInitialise[name] then FlowDetector_CallbackInitialise[name](name,false) end 
             if toname and FlowDetector_CallbackInitialise[toname] then FlowDetector_CallbackInitialise[toname](name,true,toname) end 
             refreshFD(new) 
-        elseif old == new then 
+        elseif old == new or (type(new) == 'table' and json.encode(old) == json.encode(new)) or (type(old) == 'table' and json.encode(old) == json.encode(new)) then 
             if FlowDetector_CallbackSame[name] then FlowDetector_CallbackSame[name](name,false) end 
             if toname and FlowDetector_CallbackSame[toname] then FlowDetector_CallbackSame[toname](name,true,toname) end 
         elseif old ~= new then 
