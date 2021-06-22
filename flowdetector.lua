@@ -45,6 +45,7 @@ FlowDetector.FlowCheckCreate = function(name,defaultValue,cbchange,cbsame,cbinit
     FlowDetector_CallbackChange[name] = cbchange
     FlowDetector_CallbackSame[name] = cbsame
     FlowDetector_CallbackInitialise[name] = cbinit
+    return defaultValue
 end 
 FlowDetector.FlowCheckDelete = function(name)
     if debuglog then 
