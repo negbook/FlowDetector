@@ -1,4 +1,3 @@
-
 CreateThread(function()
 	while true do Wait(1000)
 		Flow.Check(IsPauseMenuActive).OnChange(function(datas1,datas2) 

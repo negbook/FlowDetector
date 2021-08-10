@@ -1,7 +1,8 @@
 Flow = {}
 Flow._temp_ = {old={},new={}}
 
-Flow.Update = function(fn)
+Flow.Update = function(fn,...)
+	Flow._temp_.new[fn] = json.encode({fn(...)})
 	Flow._temp_.old[fn] = Flow._temp_.new[fn]
 end
 
@@ -13,12 +14,12 @@ Flow.Check = function(fn,...)
 		local t2 = json.decode(Flow._temp_.new[fn])
 		if t == nil  then 
 			--print("new",t,"to",table.unpack(t2))
-			local rtbl = {OnNew=function(fn)return fn(t2)end,OnChange=function()end,OnChangeWhatever=function(fn)fn({},t2)end,OnSame=function()end,Update=function() Flow.Update(fn) end}
+			local rtbl = {OnNew=function(fn)return fn(t2)end,OnChange=function()end,OnChangeWhatever=function(fn)fn({},t2)end,OnSame=function()end,Update=function() Flow._temp_.old[fn] = Flow._temp_.new[fn] end}
 			--Flow._temp_.old[fn] = Flow._temp_.new[fn]
 			return rtbl
 		else 
 			--print("change",table.unpack(t),"to",table.unpack(t2))
-			local rtbl = {OnChange=function(fn)return fn(t,t2) end,OnChangeWhatever=function(fn)return fn(t,t2)end,OnSame=function()end,OnNew=function()end,Update=function() Flow.Update(fn) end}
+			local rtbl = {OnChange=function(fn)return fn(t,t2) end,OnChangeWhatever=function(fn)return fn(t,t2)end,OnSame=function()end,OnNew=function()end,Update=function() Flow._temp_.old[fn] = Flow._temp_.new[fn] end}
 			--Flow._temp_.old[fn] = Flow._temp_.new[fn]
 			return rtbl
 		end 
@@ -35,3 +36,6 @@ Flow.DeleteCheck = function(fn)
     Flow._temp_.old[fn] = nil 
 	collectgarbage()
 end
+
+
+
