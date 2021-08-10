@@ -1,64 +1,85 @@
 local Flow = {}
---com.lua.utils.Flow = Flow
-Flow._temp_ = {}
-Flow._temp_.old={}
-Flow._temp_.new={}
-Flow._temp_.on={}
-Flow._temp_.cbchange={}
-Flow._temp_.cbsame={}
-Flow._temp_.cboninit={}
 
-Flow.CreateCallback = function(fn,cbOnChange,cbOnSame,cbOnInit)
-	if cbOnChange then Flow._temp_.cbchange[fn] = cbOnChange end 
-	if cbOnSame then Flow._temp_.cbsame[fn] = cbOnSame end 
-	if cbOnInit then Flow._temp_.cboninit[fn] = cbOnInit end 
-end 
-
-
-Flow.CreateCallbackOnChange = function(fn,cbOnChange)
-	if cbOnChange then Flow._temp_.cbchange[fn] = cbOnChange end 
-end 
-
-Flow.CreateCallbackOnSame = function(fn,cbOnSame)
-	if cbOnSame then Flow._temp_.cbsame[fn] = cbOnSame end 
-end 
-
-Flow.CreateCallbackOnInit = function(fn,cbOnInit)
-	if cbOnInit then Flow._temp_.cboninit[fn] = cbOnInit end 
-end 
+Flow._temp_ = {old={},new={},oldDataSource={},newDataSource={}}
 
 Flow.Check = function(fn,...)
+	local args = {...} 
+	local lastarg = args[#args]
+	local cb = type(lastarg) == "function" and lastarg or nil
+	table.remove(args,#args)
 	local _fn = fn 
-	--if type(fn) == 'table' then --remote functions
-		--if fn.__cfx_functionReference then 
-			--fn = com.lua.utils.Text.Split(fn.__cfx_functionReference,":")[1]..tostring(com.lua.utils.Text.Split(fn.__cfx_functionReference,":")[2])
-		--end 
-	--end 
-	local tt = {_fn(...)}
+	local tt = {_fn(table.unpack(args))}
 	Flow._temp_.new[fn] = json.encode(tt)
+	Flow._temp_.newDataSource[fn] = tt
 	if Flow._temp_.old[fn] ~= Flow._temp_.new[fn] then 
-		local t = Flow._temp_.old[fn] and json.decode(Flow._temp_.old[fn]) or nil 
-		local t2 = json.decode(Flow._temp_.new[fn])
+		local t = Flow._temp_.oldDataSource[fn] and Flow._temp_.oldDataSource[fn] or nil 
+		local t2 = Flow._temp_.newDataSource[fn]
 		if t == nil  then 
-			print("init",t,"to",table.unpack(t2))
 			Flow._temp_.old[fn] = Flow._temp_.new[fn]
-			if Flow._temp_.cbchange[fn] then Flow._temp_.cbchange[fn](t,t2,true) end 
+			Flow._temp_.oldDataSource[fn] = Flow._temp_.newDataSource[fn]
+			
+			if cb then cb("OnInit",t2) end 
+			if cb then cb("OnChangeWhatever","nil",t2) end 
 		else 
-			print("change",table.unpack(t),"to",table.unpack(t2))
 			Flow._temp_.old[fn] = Flow._temp_.new[fn]
-			if Flow._temp_.cbchange[fn] then Flow._temp_.cbchange[fn](t,t2,false) end 
+			Flow._temp_.oldDataSource[fn] = Flow._temp_.newDataSource[fn]
+
+			if cb then cb("OnChange",table.unpack(t),table.unpack(t2)) end 
+			if cb then cb("OnChangeWhatever",table.unpack(t),table.unpack(t2)) end 
 		end 
 	else 
-		local t = json.decode(Flow._temp_.new[fn])
-		print("same",table.unpack(t))
-		if Flow._temp_.cbsame[fn] then Flow._temp_.cbsame[fn](t) end 
+		local t = Flow._temp_.newDataSource[fn]
+		if cb then cb("OnSame",table.unpack(t)) end 
 	end 
 end 
+
+Flow.CheckChange = function(fn,...)
+	local args = {...} 
+	local lastarg = args[#args]
+	local cb = type(lastarg) == "function" and lastarg or nil
+	table.remove(args,#args)
+	local _fn = fn 
+	local tt = {_fn(table.unpack(args))}
+	Flow._temp_.new[fn] = json.encode(tt)
+	Flow._temp_.newDataSource[fn] = tt
+	if Flow._temp_.old[fn] ~= Flow._temp_.new[fn] then 
+		local t = Flow._temp_.oldDataSource[fn] and Flow._temp_.oldDataSource[fn] or nil 
+		local t2 = Flow._temp_.newDataSource[fn]
+		if t == nil  then 
+			--print("init",t,"to",table.unpack(t2))
+			Flow._temp_.old[fn] = Flow._temp_.new[fn]
+			Flow._temp_.oldDataSource[fn] = Flow._temp_.newDataSource[fn]
+			if cb then cb("nil",t2) end 
+		else 
+			--print("change",table.unpack(t),"to",table.unpack(t2))
+			Flow._temp_.old[fn] = Flow._temp_.new[fn]
+			Flow._temp_.oldDataSource[fn] = Flow._temp_.newDataSource[fn]
+			if cb then cb(table.unpack(t),table.unpack(t2)) end 
+		end 
+	end 
+end 
+
+Flow.CheckSame = function(fn,...)
+	local args = {...} 
+	local lastarg = args[#args]
+	local cb = type(lastarg) == "function" and lastarg or nil
+	table.remove(args,#args)
+	local _fn = fn 
+	local tt = {_fn(table.unpack(args))}
+	Flow._temp_.new[fn] = json.encode(tt)
+	Flow._temp_.newDataSource[fn] = tt
+	if Flow._temp_.old[fn] == Flow._temp_.new[fn] then 
+		local t = Flow._temp_.newDataSource[fn]
+		--print("same",table.unpack(t))
+		if Flow._temp_.cbsame[fn] then Flow._temp_.cbsame[fn](t) end 
+		if cb then cb(table.unpack(t)) end 
+	end 
+end 
+
 
 Flow.DeleteCheck = function(fn)
 	Flow._temp_.new[fn] = nil 
     Flow._temp_.old[fn] = nil 
-
 end
 
 
