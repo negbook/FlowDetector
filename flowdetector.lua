@@ -26,7 +26,7 @@ Flow.Check = function(fn,...)
 	end 
 end 
 
-Flow.Delete = function(fn)
+Flow.DeleteCheck = function(fn)
 	Flow._temp_.new[fn] = nil 
     Flow._temp_.old[fn] = nil 
 	collectgarbage()
