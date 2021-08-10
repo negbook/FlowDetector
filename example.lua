@@ -1,3 +1,4 @@
+
 CreateThread(function()
 	while true do Wait(1000)
 		Flow.Check(IsPauseMenuActive).OnChange(function(datas1,datas2) 
@@ -12,6 +13,7 @@ CreateThread(function()
 		Flow.Check(IsPauseMenuActive).OnSame(function(datas)
 			print("OnNew",table.unpack(datas))
 		end)
-		Flow.Check(IsPauseMenuActive).Update()
+		Flow.Check(IsPauseMenuActive).Update() -- or Flow.Update(IsPauseMenuActive)
+		
 	end 
 end)
