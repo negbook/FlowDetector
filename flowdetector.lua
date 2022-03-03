@@ -51,3 +51,16 @@ Flow.CheckNative = function(name,fn,...)
 	end 
 	
 end 
+
+Flow.Check = function(name,value,cb)
+	local on = {}
+
+	if not Flows[name] then 
+		Flows[name] = newObject(value)
+	end
+	cb(on)
+	if on.change or on.same then 
+		Flows[name]('set',value,on)
+	end 
+end 
+Flow.CheckValue = Flow.Check

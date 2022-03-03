@@ -7,3 +7,4 @@ author 'negbook'
 
 shared_script 'flowdetector.lua'
 
+client_script 'example.lua'
