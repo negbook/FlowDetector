@@ -1,4 +1,4 @@
-local Flow = {}
+Flow = {}
 local Flows = {}
 local e = {}
 local function newObject(value)
